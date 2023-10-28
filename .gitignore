@@ -1,0 +1,9 @@
+mpp/
+*.log
+*.pyc
+*.bak
+*.old
+*.swp
+*.tmp
+.vscode/
+

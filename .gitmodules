@@ -1,0 +1,3 @@
+[submodule "mpp"]
+	path = mpp
+	url = https://github.com/rockchip-linux/mpp.git
