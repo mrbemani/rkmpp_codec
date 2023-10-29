@@ -1,16 +1,17 @@
 
 
-#include <opencv2/opencv.hpp>
-#include "mpp/inc/mpp_buffer.h"
-#include "mpp/inc/mpp_frame.h"
-#include "mpp/inc/mpp_packet.h"
+#include <opencv4/opencv2/opencv.hpp>
+#include <rockchip/mpp_rc_api.h>
+#include <rockchip/mpp_buffer.h>
+#include <rockchip/mpp_frame.h>
+#include <rockchip/mpp_packet.h>
 
 // ... Your setup code ...
 
 #define TS_MAX_PATH_LEN 256
 
 
-MppFrame convertToMppFrame(const cv::Mat& cvFrame) 
+MppFrame CvFrameToMppFrame(const cv::Mat& cvFrame)
 {
     // Check if the color conversion is needed (e.g., from BGR to YUV)
     cv::Mat yuvFrame;
@@ -30,16 +31,11 @@ MppFrame convertToMppFrame(const cv::Mat& cvFrame)
     mpp_frame_set_height(mpp_frame, cvFrame.rows);
     mpp_frame_set_buffer(mpp_frame, buffer);
 
-    // Set any other necessary properties of the MPP frame
-    // ...
-
-
-
     return mpp_frame;
 }
 
 
-void encode_frame(MppApi *api, MppCtx ctx, MppEncCfg cfg, const cv::Mat& cvFrame, unsigned char output_filename[TS_MAX_PATH_LEN]) 
+void ts_encode_frame(MppApi *api, MppCtx ctx, MppEncCfg cfg, const cv::Mat& cvFrame, unsigned char output_filename[TS_MAX_PATH_LEN]) 
 {
     // Convert the OpenCV frame to an MPP frame
     if (frame.empty()) {
@@ -48,8 +44,8 @@ void encode_frame(MppApi *api, MppCtx ctx, MppEncCfg cfg, const cv::Mat& cvFrame
 
     // Convert the OpenCV frame to a format that MPP can understand, if necessary
     // This may involve converting the color space, reformatting the data, etc.
-    // Assume convertToMppFrame is a function you've defined to handle this conversion
-    MppFrame mpp_frame = convertToMppFrame(frame);
+    // Assume CvFrameToMppFrame is a function you've defined to handle this conversion
+    MppFrame mpp_frame = CvFrameToMppFrame(frame);
 
     // Set up the MPP encoding context, if not already set up
     // This would typically be done outside the loop, before entering it

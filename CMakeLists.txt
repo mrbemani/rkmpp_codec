@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 3.10)
 # Set the project name and version
 project(tsrkmpp VERSION 1.0)
 
-# add libraries
-add_subdirectory(libs)
+# add include path
+include_directories(./usr/include)
 
 
 #set(CMAKE_SOURCE_DIR .)
