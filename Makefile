@@ -1,8 +1,8 @@
 # make file of cv_mpp
 
 CXX = g++
-CXXFLAGS = -std=c++11 -I/usr/local/include -I/usr/local/include/opencv4
-LDFLAGS = -L/usr/local/lib
+CXXFLAGS = -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4 -I./mpp -I./mpp/inc -I./mpp/mpp/base/inc -I./mpp/mpp/codec/inc -I./mpp/mpp/inc -I./mpp/osal/inc
+LDFLAGS = -L/usr/local/lib -L/usr/lib
 LDLIBS = -lopencv_core -lopencv_videoio -lopencv_imgproc -lrockchip_mpp #  -lmpp_base -lmpp_codec -lmpp_rc 
 
 TARGET = cv_mpp

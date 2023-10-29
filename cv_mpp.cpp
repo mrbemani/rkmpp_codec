@@ -4,13 +4,19 @@
  */
 
 #include <opencv2/opencv.hpp>
-#include "mpp/mpp/inc/mpp.h"
+#include <mpp.h>
+#include <rk_mpi.h>
 
 
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc < 3) 
+    {
+        printf ("cv_mpp <rtsp_url> <output_file.mp4>\n");
+        return 1;
+    }
     // Open the RTSP feed using OpenCV
-    cv::VideoCapture cap("rtsp://your_rtsp_feed_url");
+    cv::VideoCapture cap(argv[1]);
     if (!cap.isOpened()) {
         std::cerr << "Error: Unable to open the RTSP feed!" << std::endl;
         return -1;
