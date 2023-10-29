@@ -35,7 +35,7 @@ if (NOT MPP_LIB)
 endif()
 
 # Add the executable
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} cv_mpp.cpp)
 
 # Link the required libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} ${MPP_LIB})
