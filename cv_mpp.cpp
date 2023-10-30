@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
         if (frame.empty()) break;
 
         // resize frame to target size
-        cv::Resize(frame, frame, cv::Size(TARGET_W, TARGET_H));
+        cv::resize(frame, frame, cv::Size(TARGET_W, TARGET_H));
 
         // Assume MPP requires a specific buffer format
         size_t in_bufsize = frame.total() * frame.elemSize();
