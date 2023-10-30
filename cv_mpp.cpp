@@ -96,13 +96,16 @@ int main(int argc, char *argv[]) {
         cap >> frame;
         if (frame.empty()) break;
 
+        printf("frame read: %dx%d\n", frame.cols, frame.rows);
         // resize frame to target size
         cv::resize(frame, frame, cv::Size(TARGET_W, TARGET_H));
 
         // Assume MPP requires a specific buffer format
+        printf("converting cv_frame to mpp_frame ... \n");
         size_t in_bufsize = frame.total() * frame.elemSize();
         mpp_buffer_get(NULL, &input_buf, in_bufsize);
         memcpy(mpp_buffer_get_ptr(input_buf), frame.data, in_bufsize);
+        printf("[Done]\n");
 
         // Encode the frame using MPP
         printf("Encoding frame ... \n");
