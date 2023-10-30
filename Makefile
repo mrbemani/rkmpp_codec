@@ -1,17 +1,32 @@
 # make file of cv_mpp
 
 CXX = g++
-CXXFLAGS = -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4 -I./mpp -I./mpp/inc -I./mpp/mpp/base/inc -I./mpp/mpp/codec/inc -I./mpp/mpp/inc -I./mpp/osal/inc
-LDFLAGS = -L/usr/local/lib -L/usr/lib
-LDLIBS = -lopencv_core -lopencv_videoio -lopencv_imgproc -lrockchip_mpp #  -lmpp_base -lmpp_codec -lmpp_rc 
 
-TARGET = cv_mpp
-SRC = cv_mpp.cpp
+CXXFLAGS1 = -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4 -I./mpp -I./mpp/inc -I./mpp/mpp/base/inc -I./mpp/mpp/codec/inc -I./mpp/mpp/inc -I./mpp/osal/inc
+LDFLAGS1 = -L/usr/local/lib -L/usr/lib
+LDLIBS1 = -lopencv_core -lopencv_videoio -lopencv_imgproc -lrockchip_mpp #  -lmpp_base -lmpp_codec -lmpp_rc 
 
-all: $(TARGET)
+CXXFLAGS2 = -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4
+LDFLAGS2 = -L/usr/local/lib -L/usr/lib
+LDLIBS2 = -lopencv_core -lopencv_videoio -lopencv_imgproc
 
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+TARGET1 = cv_mpp 
+SRC1 = cv_mpp.cpp
+TARGET2 = cv2jpg
+SRC2 = cv2jpg.cpp
+
+all: $(TARGET1) $(TARGET2)
+
+cv_mpp: $(TARGET1)
+
+cv2jpg: $(TARGET2)
+
+$(TARGET1): $(SRC1)
+	$(CXX) $(CXXFLAGS1) $(LDFLAGS1) -o $@ $^ $(LDLIBS1)
+
+$(TARGET2): $(SRC2)
+	$(CXX) $(CXXFLAGS2) $(LDFLAGS2) -o $@ $^ $(LDLIBS2)
+
 
 deps:
 	@echo "Checking for OpenCV..."
@@ -23,6 +38,6 @@ deps:
 		cmake -DRKPLATFORM=ON -DHAVE_DRM=ON && make && sudo make install)
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET1) $(TARGET2)
 
 .PHONY: all deps clean
