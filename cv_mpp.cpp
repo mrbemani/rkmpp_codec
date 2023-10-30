@@ -100,8 +100,13 @@ int main(int argc, char *argv[]) {
     printf("Start Video loop ...\n");
     // if press Ctrl+C, exit loop
     while (true) {
+        printf("cap >> frame\n");
         cap >> frame;
-        if (frame.empty()) break;
+        printf("if (frame.empty())\n");
+        if (frame.empty()) {
+            printf("frame is empty!!! \n");
+            break;
+        }
 
         printf("frame read: %dx%d\n", frame.cols, frame.rows);
         // resize frame to target size
