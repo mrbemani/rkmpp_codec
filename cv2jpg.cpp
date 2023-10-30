@@ -3,7 +3,6 @@
  *  
  */
 
-#include <conio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
@@ -75,7 +74,7 @@ int main(int argc, char *argv[]) {
     // Initialize Rockchip MPP
     
     cv::Mat frame;
-    
+    unsigned long frame_idx = 1;
     printf("Start Video loop ...\n");
     // if press Ctrl+C, exit loop
     while (true) {
@@ -93,10 +92,11 @@ int main(int argc, char *argv[]) {
 
         // write to output_dir/frame_number.jpg
         char filename[256] = {0};
-        snprintf(filename, sizeof(filename), "%s/%d.jpg", argv[2], cap.get(cv::CAP_PROP_POS_FRAMES));
+        snprintf(filename, sizeof(filename), "%s/%d.jpg", argv[2], frame_idx);
         printf("imwrite: %s\n", filename);
         cv::imwrite(filename, frame);
 
+        frame_idx += 1;
         // if environment variable STOP_MPP_ENC is 1, exit loop
         if (getenv("STOP_MPP_ENC") && strcmp(getenv("STOP_MPP_ENC"), "1") == 0) {
             break;
