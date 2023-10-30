@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
 
         if (packet) {
             // write to file
-            byte *bufdata = (byte *)mpp_packet_get_data(packet);
+            unsigned char* bufdata = (unsigned char*)mpp_packet_get_data(packet);
             size_t buflen = mpp_packet_get_length(packet);
 
             fwrite(bufdata, sizeof(byte), buflen, fp);
