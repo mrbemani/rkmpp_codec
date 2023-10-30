@@ -94,13 +94,15 @@ int main(int argc, char *argv[]) {
     mpp_enc_cfg_set_s32(cfg, "codec", MPP_VIDEO_CodingHEVC);
     mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
 
-    cv::Mat frame;
-    MppBuffer input_buf;
-
+    
+    int frame_idx = 0;
     printf("Start Video loop ...\n");
     // if press Ctrl+C, exit loop
     while (true) {
-        printf("cap >> frame\n");
+        MppBuffer input_buf;
+        cv::Mat frame;
+        frame_idx += 1;
+        printf("cap >> frame, [%d]\n", frame_idx);
         cap >> frame;
         printf("if (frame.empty())\n");
         if (frame.empty()) {
@@ -143,6 +145,11 @@ int main(int argc, char *argv[]) {
 
         // if environment variable STOP_MPP_ENC is 1, exit loop
         if (getenv("STOP_MPP_ENC") && strcmp(getenv("STOP_MPP_ENC"), "1") == 0) {
+            break;
+        }
+        
+        // frame_idx > 20, break
+        if (frame_idx > 20) {
             break;
         }
     }

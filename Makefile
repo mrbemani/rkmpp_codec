@@ -12,6 +12,7 @@ LDLIBS2 = -lopencv_core -lopencv_videoio -lopencv_imgproc -lopencv_imgcodecs
 
 TARGET1 = cv_mpp 
 SRC1 = cv_mpp.cpp
+
 TARGET2 = cv2jpg
 SRC2 = cv2jpg.cpp
 
