@@ -17,6 +17,8 @@
 
 int main(int argc, char *argv[]) {
     
+    printf("Start Application ...\n");
+
     // check if the user has provided the RTSP URL and output filename
     if (argc < 3) 
     {
@@ -65,6 +67,8 @@ int main(int argc, char *argv[]) {
         return 3;
     }
 
+    printf("Start CV VideoCapture ...\n");
+
     // Open the RTSP feed using OpenCV
     cv::VideoCapture cap(argv[1]);
     if (!cap.isOpened()) {
@@ -72,11 +76,13 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
+    printf("Creating MPP API Context ...\n");
     // Initialize Rockchip MPP
     MppCtx ctx;
     MppApi *mpi;
     mpp_create(&ctx, &mpi);
 
+    printf("Set MPP Encoder Configuration ...\n");
     // Set encoding parameters (assuming an API similar to FFmpeg)
     // This is hypothetical and may not match the exact MPP API
     MppEncCfg cfg;
@@ -91,6 +97,7 @@ int main(int argc, char *argv[]) {
     cv::Mat frame;
     MppBuffer input_buf;
 
+    printf("Start Video loop ...\n");
     // if press Ctrl+C, exit loop
     while (true) {
         cap >> frame;
@@ -135,11 +142,15 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    printf("Video loop exited ...\n");
+
     // Finalize MPP and release resources
     mpp_destroy(ctx);
 
     // Close the output file
     if (fp) fclose(fp);
+
+    printf("Application exited ...\n");
 
     return 0;
 }
