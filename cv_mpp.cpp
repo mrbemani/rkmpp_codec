@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
             unsigned char* bufdata = (unsigned char*)mpp_packet_get_data(packet);
             size_t buflen = mpp_packet_get_length(packet);
 
-            fwrite(bufdata, sizeof(byte), buflen, fp);
+            fwrite(bufdata, sizeof(unsigned char), buflen, fp);
             printf("Wrote %zu bytes\n", buflen);
 
             // Release the packet
