@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     }
 
     // filename should not contain any special characters
-    if (strpbrk(output_filename, "!@#$%^&*()+=-[]{}\\|;:'\",.<>/?`~") != NULL) {
+    if (strpbrk(output_filename, "!@#$%^&*()+=-[]{}\\|;:'\",<>?`~") != NULL) {
         printf("Invalid output filename: %s\n", output_filename);
         return 2;
     }
