@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        mpp_ret = mpp_frame_deinit(&frame);
+        mpp_ret = mpp_frame_deinit(&mpp_frame);
         if (mpp_ret != MPP_OK)
         {
             printf("Failed to mpp_frame_deinit\n");
