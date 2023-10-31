@@ -41,7 +41,6 @@ int main(int argc, char *argv[]) {
     MppCtx ctx;
     MppApi *mpi;
     mpp_ret = mpp_create(&ctx, &mpi);
-
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_create\n");
@@ -49,7 +48,9 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpp_init(ctx, MPP_CTX_ENC, MPP_VIDEO_CodingHEVC);
+    // Initialize MPP for encoding
+    printf("Initialize MPP Encoder ...\n");
+    mpp_ret = mpp_init(ctx, MPP_CTX_ENC, MPP_VIDEO_CodingAVC);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_init\n");
@@ -101,7 +102,7 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "rc_mode", MPP_ENC_RC_MODE_VBR);
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "rc_mode", MPP_ENC_RC_MODE_CBR);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: rc_mode\n");
@@ -117,7 +118,7 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "codec", MPP_VIDEO_CodingHEVC);
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "codec", MPP_VIDEO_CodingAVC);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: codec\n");
@@ -125,7 +126,7 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
+    mpp_ret = mpi->control(MPP_ENC_SET_CFG, cfg);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to set MPP encoder configuration\n");
