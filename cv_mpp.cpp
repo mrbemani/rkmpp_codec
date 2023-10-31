@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_create\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_init\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: width\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: height\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: fps_in\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: fps_out\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: rc_mode\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
     
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: codec\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32: codec\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to set MPP encoder configuration\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
     
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
         if (mpp_ret != MPP_OK)
         {
             printf("Failed to encode frame\n");
-            printf("Error: %d\n", mpp_ret)
+            printf("Error: %d\n", mpp_ret);
             return 4;
         }
         printf("[Done]\n");
@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) {
             if (mpp_ret != MPP_OK)
             {
                 printf("Failed to mpp_packet_deinit\n");
-                printf("Error: %d\n", mpp_ret)
+                printf("Error: %d\n", mpp_ret);
                 return 4;
             }
         }
@@ -187,7 +187,7 @@ int main(int argc, char *argv[]) {
         if (mpp_ret != MPP_OK)
         {
             printf("Failed to mpp_buffer_put\n");
-            printf("Error: %d\n", mpp_ret)
+            printf("Error: %d\n", mpp_ret);
             return 4;
         }
 
@@ -209,7 +209,7 @@ int main(int argc, char *argv[]) {
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_destroy\n");
-        printf("Error: %d\n", mpp_ret)
+        printf("Error: %d\n", mpp_ret);
         return 4;
     }
 
