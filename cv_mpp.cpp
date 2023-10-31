@@ -58,6 +58,9 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
+    printf("Show Configuration ...\n");
+    mpp_enc_cfg_show();
+
     printf("Set MPP Encoder Configuration ...\n");
     // Set encoding parameters (assuming an API similar to FFmpeg)
     // This is hypothetical and may not match the exact MPP API
