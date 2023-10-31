@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpi->control(MPP_ENC_SET_CFG, cfg);
+    mpp_ret = mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to set MPP encoder configuration\n");
