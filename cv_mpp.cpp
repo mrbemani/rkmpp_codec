@@ -49,6 +49,14 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
+    mpp_ret = mpp_init(ctx, MPP_CTX_ENC, MPP_VIDEO_CodingHEVC);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_init\n");
+        printf("Error: %d\n", mpp_ret);
+        return 4;
+    }
+
     printf("Set MPP Encoder Configuration ...\n");
     // Set encoding parameters (assuming an API similar to FFmpeg)
     // This is hypothetical and may not match the exact MPP API
@@ -204,7 +212,17 @@ int main(int argc, char *argv[]) {
 
     printf("Video loop exited ...\n");
 
+    printf("Finalize MPP Encoder ...\n");
+    mpp_ret = mpp_enc_cfg_deinit(cfg);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_deinit\n");
+        printf("Error: %d\n", mpp_ret);
+        return 4;
+    }
+
     // Finalize MPP and release resources
+    printf("Finalize MPP API Context ...\n");
     mpp_ret = mpp_destroy(ctx);
     if (mpp_ret != MPP_OK)
     {
