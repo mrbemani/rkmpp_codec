@@ -70,6 +70,22 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "rc_mode", MPP_ENC_RC_MODE_CBR);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: rc_mode\n");
+        printf("Error: %d\n", mpp_ret);
+        return 4;
+    }
+    
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "format", MPP_FMT_YUV420SP);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: codec\n");
+        printf("Error: %d\n", mpp_ret);
+        return 4;
+    }
+
     mpp_ret = mpp_enc_cfg_set_s32(cfg, "width", TARGET_W);
     if (mpp_ret != MPP_OK)
     {
@@ -102,22 +118,6 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "rc_mode", MPP_ENC_RC_MODE_CBR);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: rc_mode\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
-    
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "format", MPP_FMT_YUV420SP);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: codec\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
-
     mpp_ret = mpp_enc_cfg_set_s32(cfg, "codec", MPP_VIDEO_CodingAVC);
     if (mpp_ret != MPP_OK)
     {
@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
     printf("Start Video loop ...\n");
     // if press Ctrl+C, exit loop
     while (true) {
-        MppBuffer input_buf;
+        MppBuffer input_buf = NULL;
         frame_idx += 1;
         
         // create an empty frame with size 1920x1080x3
