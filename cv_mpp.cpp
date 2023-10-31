@@ -9,6 +9,7 @@
 #include <opencv2/opencv.hpp>
 #include <mpp.h>
 #include <rk_mpi.h>
+#include <mpp_enc_cfg.h>
 
 
 #define TARGET_W 1920
@@ -171,15 +172,6 @@ int main(int argc, char *argv[]) {
     }
 
     printf("Video loop exited ...\n");
-
-    printf("Finalize MPP Encoder ...\n");
-    mpp_ret = mpp_enc_cfg_deinit(cfg);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_deinit\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
 
     // Finalize MPP and release resources
     printf("Finalize MPP API Context ...\n");
