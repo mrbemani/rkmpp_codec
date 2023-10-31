@@ -19,40 +19,9 @@ int main(int argc, char *argv[]) {
     
     printf("Start Application ...\n");
 
-    // check if the user has provided the RTSP URL and output filename
-    if (argc < 3) 
-    {
-        printf ("cv_mpp <rtsp_url> <output_file.mp4>\n");
-        return 1;
-    }
+    MPP_RET mpp_ret = MPP_OK;
 
-    char output_filename[256] = {0};
-    snprintf(output_filename, sizeof(output_filename), "%s", argv[2]);
-
-    // check output filename. It should be alphanumeric with extension .mp4
-    if (strlen(output_filename) < 5) {
-        printf("Invalid output filename: %s\n", output_filename);
-        return 2;
-    }
-
-    if (strcmp(output_filename + strlen(output_filename) - 4, ".mp4") != 0) {
-        printf("Invalid output filename: %s\n", output_filename);
-        return 2;
-    }
-
-    // check if output filename is alphanumeric with or without underscores
-    for (int i = 0; i < strlen(output_filename) - 4; i++) {
-        if (!isalnum(output_filename[i]) && output_filename[i] != '_') {
-            printf("Invalid output filename: %s\n", output_filename);
-            return 2;
-        }
-    }
-
-    // filename should not contain any special characters
-    if (strpbrk(output_filename, "!@#$%^&*()+=-[]{}\\|;:'\",<>?`~") != NULL) {
-        printf("Invalid output filename: %s\n", output_filename);
-        return 2;
-    }
+    char output_filename[] = "output.mp4";
 
     // Remove the output file if it already exists
     if (access(output_filename, F_OK) == 0) {
@@ -60,63 +29,120 @@ int main(int argc, char *argv[]) {
     }
 
     // Open the output file
-    FILE *fp = fopen(argv[2], "wb");
+    FILE *fp = fopen(output_filename, "ab+");
 
     if (fp == NULL) {
         printf("Failed to open output file: %s\n", output_filename);
         return 3;
     }
 
-    printf("Start CV VideoCapture ...\n");
-
-    // Open the RTSP feed using OpenCV
-    cv::VideoCapture cap(argv[1]);
-    if (!cap.isOpened()) {
-        std::cerr << "Error: Unable to open the RTSP feed!" << std::endl;
-        return -1;
-    }
-
     printf("Creating MPP API Context ...\n");
     // Initialize Rockchip MPP
     MppCtx ctx;
     MppApi *mpi;
-    mpp_create(&ctx, &mpi);
+    mpp_ret = mpp_create(&ctx, &mpi);
+
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_create\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
 
     printf("Set MPP Encoder Configuration ...\n");
     // Set encoding parameters (assuming an API similar to FFmpeg)
     // This is hypothetical and may not match the exact MPP API
     MppEncCfg cfg;
-    mpp_enc_cfg_init(&cfg);
-    mpp_enc_cfg_set_s32(cfg, "width", TARGET_W);
-    mpp_enc_cfg_set_s32(cfg, "height", TARGET_H);
-    mpp_enc_cfg_set_s32(cfg, "rc_mode", MPP_ENC_RC_MODE_VBR);
-    mpp_enc_cfg_set_s32(cfg, "format", MPP_FMT_YUV420SP);
-    mpp_enc_cfg_set_s32(cfg, "codec", MPP_VIDEO_CodingHEVC);
-    mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
+    mpp_ret = mpp_enc_cfg_init(&cfg);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_init\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
 
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "width", TARGET_W);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: width\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
+
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "height", TARGET_H);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: height\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
+
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "fps_in", 30);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: fps_in\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
+
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "fps_out", 30);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: fps_out\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
+
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "rc_mode", MPP_ENC_RC_MODE_VBR);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: rc_mode\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
+    
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "format", MPP_FMT_YUV420SP);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: codec\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
+
+    mpp_ret = mpp_enc_cfg_set_s32(cfg, "codec", MPP_VIDEO_CodingHEVC);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_enc_cfg_set_s32: codec\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
+
+    mpp_ret = mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to set MPP encoder configuration\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
     
     int frame_idx = 0;
     printf("Start Video loop ...\n");
     // if press Ctrl+C, exit loop
     while (true) {
         MppBuffer input_buf;
-        cv::Mat frame;
         frame_idx += 1;
-        printf("cap >> frame, [%d]\n", frame_idx);
-        cap >> frame;
-        printf("if (frame.empty())\n");
-        if (frame.empty()) {
-            printf("frame is empty!!! \n");
-            break;
-        }
-
-        printf("frame read: %dx%d\n", frame.cols, frame.rows);
-        // resize frame to target size
-        cv::resize(frame, frame, cv::Size(TARGET_W, TARGET_H));
-
+        
+        // create an empty frame with size 1920x1080x3
+        cv::Mat frame = cv::Mat::zeros(TARGET_H, TARGET_W, CV_8UC3);
+        
+        // write yellow text frame_idx in the center of frame
+        char text[256] = {0};
+        snprintf(text, sizeof(text), "frame_idx: %d", frame_idx);
+        cv::putText(frame, text, cv::Point(TARGET_W/2-100, TARGET_H/2), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 255, 255), 2);
+        
         // Assume MPP requires a specific buffer format
-        printf("converting cv_frame to mpp_frame ... \n");
         size_t in_bufsize = frame.total() * frame.elemSize();
+        printf("converting cv_frame to mpp_frame ... %ld \n", in_bufsize);
         mpp_buffer_get(NULL, &input_buf, in_bufsize);
         memcpy(mpp_buffer_get_ptr(input_buf), frame.data, in_bufsize);
         printf("[Done]\n");
@@ -124,24 +150,46 @@ int main(int argc, char *argv[]) {
         // Encode the frame using MPP
         printf("Encoding frame ... \n");
         MppPacket packet = NULL;
-        mpi->encode_put_frame(ctx, input_buf);
-        mpi->encode_get_packet(ctx, &packet);
+        // allocate packet
+        //mpi->encode_put_frame(ctx, input_buf);
+        //mpi->encode_get_packet(ctx, &packet);
+        mpp_ret = mpi->encode(ctx, input_buf, &packet);
+        if (mpp_ret != MPP_OK)
+        {
+            printf("Failed to encode frame\n");
+            printf("Error: %d\n", mpp_ret)
+            return 4;
+        }
         printf("[Done]\n");
 
         if (packet) {
             // write to file
-            unsigned char* bufdata = (unsigned char*)mpp_packet_get_data(packet);
-            size_t buflen = mpp_packet_get_length(packet);
+            //unsigned char* bufdata = (unsigned char*)mpp_packet_get_data(packet);
+            void *bufdata = mpp_packet_get_pos(packet);  // Get the data pointer from the packet.
+            size_t buflen = mpp_packet_get_length(packet);  // Get the data size from the packet.
 
-            fwrite(bufdata, sizeof(unsigned char), buflen, fp);
+            // Write the packet to the output file
+            fwrite(bufdata, 1, buflen, fp);
             printf("Wrote %zu bytes\n", buflen);
 
             // Release the packet
-            mpp_packet_deinit(&packet);
+            mpp_ret = mpp_packet_deinit(&packet);
+            if (mpp_ret != MPP_OK)
+            {
+                printf("Failed to mpp_packet_deinit\n");
+                printf("Error: %d\n", mpp_ret)
+                return 4;
+            }
         }
 
         // Release the input buffer
-        mpp_buffer_put(input_buf);
+        mpp_ret = mpp_buffer_put(input_buf);
+        if (mpp_ret != MPP_OK)
+        {
+            printf("Failed to mpp_buffer_put\n");
+            printf("Error: %d\n", mpp_ret)
+            return 4;
+        }
 
         // if environment variable STOP_MPP_ENC is 1, exit loop
         if (getenv("STOP_MPP_ENC") && strcmp(getenv("STOP_MPP_ENC"), "1") == 0) {
@@ -149,7 +197,7 @@ int main(int argc, char *argv[]) {
         }
         
         // frame_idx > 20, break
-        if (frame_idx > 20) {
+        if (frame_idx > 100) {
             break;
         }
     }
@@ -157,7 +205,13 @@ int main(int argc, char *argv[]) {
     printf("Video loop exited ...\n");
 
     // Finalize MPP and release resources
-    mpp_destroy(ctx);
+    mpp_ret = mpp_destroy(ctx);
+    if (mpp_ret != MPP_OK)
+    {
+        printf("Failed to mpp_destroy\n");
+        printf("Error: %d\n", mpp_ret)
+        return 4;
+    }
 
     // Close the output file
     if (fp) fclose(fp);
