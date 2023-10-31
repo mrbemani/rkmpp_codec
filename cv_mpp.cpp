@@ -64,72 +64,28 @@ int main(int argc, char *argv[]) {
     printf("Set MPP Encoder Configuration ...\n");
     // Set encoding parameters (assuming an API similar to FFmpeg)
     // This is hypothetical and may not match the exact MPP API
-    MppEncCfg cfg;
-    mpp_ret = mpp_enc_cfg_init(&cfg);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_init\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
+    // Initialize the encoder configuration structure
+    MppEncCfgSet cfg_set;
+    memset(&cfg_set, 0, sizeof(cfg_set));
 
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "rc_mode", MPP_ENC_RC_MODE_CBR);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: rc_mode\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
+
+    // Set the resolution
+    cfg_set.prep.width = TARGET_W;
+    cfg_set.prep.height = TARGET_H;
+
+    cfg_set.rc.rc_mode = MPP_ENC_RC_MODE_CBR;
+    cfg_set.rc.quality = MPP_ENC_RC_QUALITY_BEST;
+
+    cfg_set.rc.bps_target = 4 * 1024 * 1024;
+    cfg_set.rc.bps_max = 4 * 1024 * 1024;
+    cfg_set.rc.bps_min = 4 * 1024 * 1024;
     
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "format", MPP_FMT_YUV420SP);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: codec\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
+    cfg_set.rc.fps_in_num = 25;
+    cfg_set.rc.fps_in_denorm = 1;
+    cfg_set.rc.fps_out_num = 25;
+    cfg_set.rc.fps_out_denorm = 1;
 
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "width", TARGET_W);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: width\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
-
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "height", TARGET_H);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: height\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
-
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "fps_in", 30);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: fps_in\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
-
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "fps_out", 30);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: fps_out\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
-
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "codec", MPP_VIDEO_CodingAVC);
-    if (mpp_ret != MPP_OK)
-    {
-        printf("Failed to mpp_enc_cfg_set_s32: codec\n");
-        printf("Error: %d\n", mpp_ret);
-        return 4;
-    }
-
-    mpp_ret = mpi->control(ctx, MPP_ENC_SET_CFG, cfg);
+    mpp_ret = mpi->control(ctx, MPP_ENC_SET_CFG, &cfg_set);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to set MPP encoder configuration\n");
