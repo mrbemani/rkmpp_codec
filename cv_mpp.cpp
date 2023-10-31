@@ -114,7 +114,6 @@ int main(int argc, char *argv[]) {
         printf("converting cv_frame to mpp_frame ... %ld \n", in_bufsize);
         mpp_buffer_get(NULL, &input_buf, in_bufsize);
         memcpy(mpp_buffer_get_ptr(input_buf), frame.data, in_bufsize);
-        printf("[Done]\n");
 
         MppFrame mpp_frame = NULL;
         mpp_ret = mpp_frame_init(&mpp_frame);
@@ -125,18 +124,13 @@ int main(int argc, char *argv[]) {
             return 4;
         }
 
-        mpp_ret = mpp_frame_set_buffer(mpp_frame, input_buf);
-        if (mpp_ret != MPP_OK)
-        {
-            printf("Failed to mpp_frame_set_buffer\n");
-            printf("Error: %d\n", mpp_ret);
-            return 4;
-        }
+        mpp_frame_set_buffer(mpp_frame, input_buf);
+        printf("[Done]\n");
 
         // Encode the frame using MPP
         printf("Encoding frame ... \n");
         MppPacket packet = NULL;
-        mpp_ret = mpi->encode_put_frame(ctx, input_buf);
+        mpp_ret = mpi->encode_put_frame(ctx, mpp_frame);
         if (mpp_ret != MPP_OK)
         {
             printf("Failed to encode_put_frame\n");
