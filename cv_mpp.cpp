@@ -116,16 +116,38 @@ int main(int argc, char *argv[]) {
         memcpy(mpp_buffer_get_ptr(input_buf), frame.data, in_bufsize);
         printf("[Done]\n");
 
+        MppFrame mpp_frame = NULL;
+        mpp_ret = mpp_frame_init(&mpp_frame);
+        if (mpp_ret != MPP_OK)
+        {
+            printf("Failed to mpp_frame_init\n");
+            printf("Error: %d\n", mpp_ret);
+            return 4;
+        }
+
+        mpp_ret = mpp_frame_set_buffer(mpp_frame, input_buf);
+        if (mpp_ret != MPP_OK)
+        {
+            printf("Failed to mpp_frame_set_buffer\n");
+            printf("Error: %d\n", mpp_ret);
+            return 4;
+        }
+
         // Encode the frame using MPP
         printf("Encoding frame ... \n");
         MppPacket packet = NULL;
-        // allocate packet
-        //mpi->encode_put_frame(ctx, input_buf);
-        //mpi->encode_get_packet(ctx, &packet);
-        mpp_ret = mpi->encode(ctx, input_buf, &packet);
+        mpp_ret = mpi->encode_put_frame(ctx, input_buf);
         if (mpp_ret != MPP_OK)
         {
-            printf("Failed to encode frame\n");
+            printf("Failed to encode_put_frame\n");
+            printf("Error: %d\n", mpp_ret);
+            return 4;
+        }
+        
+        mpp_ret = mpi->encode_get_packet(ctx, &packet);
+        if (mpp_ret != MPP_OK)
+        {
+            printf("Failed to encode_get_packet\n");
             printf("Error: %d\n", mpp_ret);
             return 4;
         }
@@ -149,6 +171,14 @@ int main(int argc, char *argv[]) {
                 printf("Error: %d\n", mpp_ret);
                 return 4;
             }
+        }
+
+        mpp_ret = mpp_frame_deinit(&frame);
+        if (mpp_ret != MPP_OK)
+        {
+            printf("Failed to mpp_frame_deinit\n");
+            printf("Error: %d\n", mpp_ret);
+            return 4;
         }
 
         // Release the input buffer
