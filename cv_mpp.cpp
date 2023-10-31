@@ -146,11 +146,12 @@ int main(int argc, char *argv[]) {
         size_t in_bufsize = frame.total() * frame.elemSize();
         printf("converting cv_frame to mpp_frame ... %ld \n", in_bufsize);
         MppFrame mpp_frame = convertToMppFrame(frame);
-        printf("[Done]\n");
+        printf("[Converting Done]\n");
 
         // Encode the frame using MPP
         printf("Encoding frame ... \n");
         MppPacket packet = NULL;
+        printf("encode_put_frame ... \n");
         mpp_ret = mpi->encode_put_frame(ctx, mpp_frame);
         if (mpp_ret != MPP_OK)
         {
@@ -158,7 +159,7 @@ int main(int argc, char *argv[]) {
             printf("Error: %d\n", mpp_ret);
             return 4;
         }
-        
+        printf("encode_get_packet ... \n");
         mpp_ret = mpi->encode_get_packet(ctx, &packet);
         if (mpp_ret != MPP_OK)
         {
@@ -166,7 +167,7 @@ int main(int argc, char *argv[]) {
             printf("Error: %d\n", mpp_ret);
             return 4;
         }
-        printf("[Done]\n");
+        printf("[Encoding Done]\n");
 
         if (packet) {
             // write to file
