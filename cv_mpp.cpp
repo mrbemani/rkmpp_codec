@@ -16,6 +16,40 @@
 #define TARGET_H 1080
 
 
+MppFrame convertToMppFrame(const cv::Mat &cvFrame) {
+    // Convert BGR to RGB
+    cv::Mat rgbFrame;
+    cv::cvtColor(cvFrame, rgbFrame, cv::COLOR_BGR2RGB);
+
+    // Create an MppFrame object
+    MppFrame mppFrame = nullptr;
+    mpp_frame_init(&mppFrame);
+    
+    // Get frame dimensions
+    int width = rgbFrame.cols;
+    int height = rgbFrame.rows;
+    
+    // Set frame dimensions and format
+    mpp_frame_set_width(mppFrame, width);
+    mpp_frame_set_height(mppFrame, height);
+    mpp_frame_set_fmt(mppFrame, MPP_FMT_RGB888);  // Assuming RGB format
+    
+    // Allocate an MppBuffer to hold the frame data
+    MppBuffer mppBuffer;
+    size_t bufferSize = width * height * rgbFrame.channels();
+    mpp_buffer_get(nullptr, &mppBuffer, bufferSize);
+    
+    // Copy data from rgbFrame to mppBuffer
+    memcpy(mpp_buffer_get_ptr(mppBuffer), rgbFrame.data, bufferSize);
+    
+    // Attach the MppBuffer to the MppFrame
+    mpp_frame_set_buffer(mppFrame, mppBuffer);
+    
+    return mppFrame;
+}
+
+
+
 int main(int argc, char *argv[]) {
     
     printf("Start Application ...\n");
@@ -98,7 +132,6 @@ int main(int argc, char *argv[]) {
     printf("Start Video loop ...\n");
     // if press Ctrl+C, exit loop
     while (true) {
-        MppBuffer input_buf = NULL;
         frame_idx += 1;
         
         // create an empty frame with size 1920x1080x3
@@ -112,19 +145,7 @@ int main(int argc, char *argv[]) {
         // Assume MPP requires a specific buffer format
         size_t in_bufsize = frame.total() * frame.elemSize();
         printf("converting cv_frame to mpp_frame ... %ld \n", in_bufsize);
-        mpp_buffer_get(NULL, &input_buf, in_bufsize);
-        memcpy(mpp_buffer_get_ptr(input_buf), frame.data, in_bufsize);
-
-        MppFrame mpp_frame = NULL;
-        mpp_ret = mpp_frame_init(&mpp_frame);
-        if (mpp_ret != MPP_OK)
-        {
-            printf("Failed to mpp_frame_init\n");
-            printf("Error: %d\n", mpp_ret);
-            return 4;
-        }
-
-        mpp_frame_set_buffer(mpp_frame, input_buf);
+        MppFrame mpp_frame = convertToMppFrame(frame);
         printf("[Done]\n");
 
         // Encode the frame using MPP
@@ -167,19 +188,11 @@ int main(int argc, char *argv[]) {
             }
         }
 
+        printf("Deinitialize MPP Frame ...\n");
         mpp_ret = mpp_frame_deinit(&mpp_frame);
         if (mpp_ret != MPP_OK)
         {
             printf("Failed to mpp_frame_deinit\n");
-            printf("Error: %d\n", mpp_ret);
-            return 4;
-        }
-
-        // Release the input buffer
-        mpp_ret = mpp_buffer_put(input_buf);
-        if (mpp_ret != MPP_OK)
-        {
-            printf("Failed to mpp_buffer_put\n");
             printf("Error: %d\n", mpp_ret);
             return 4;
         }
