@@ -107,8 +107,6 @@ int main(int argc, char *argv[]) {
     // Set the resolution
     cfg_set.prep.width = TARGET_W;
     cfg_set.prep.height = TARGET_H;
-    cfg_set.prep.hor_stride = TARGET_W;
-    cfg_set.prep.ver_stride = TARGET_H;
     cfg_set.prep.format = MPP_FMT_RGB888;
 
     cfg_set.rc.rc_mode = MPP_ENC_RC_MODE_CBR;
