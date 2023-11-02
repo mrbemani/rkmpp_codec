@@ -2,11 +2,11 @@
 
 CXX = g++
 
-CXXFLAGS1 = -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4 -I./mpp -I./mpp/inc -I./mpp/mpp/base/inc -I./mpp/mpp/codec/inc -I./mpp/mpp/inc -I./mpp/osal/inc
+CXXFLAGS1 = -g -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4 -I./mpp -I./mpp/inc -I./mpp/mpp/base/inc -I./mpp/mpp/codec/inc -I./mpp/mpp/inc -I./mpp/osal/inc
 LDFLAGS1 = -L/usr/local/lib -L/usr/lib
 LDLIBS1 = -lopencv_core -lopencv_videoio -lopencv_imgproc -lopencv_imgcodecs -lrockchip_mpp #  -lmpp_base -lmpp_codec -lmpp_rc 
 
-CXXFLAGS2 = -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4
+CXXFLAGS2 = -g -std=c++11 -I/usr/include -I/usr/local/include -I/usr/include/opencv4
 LDFLAGS2 = -L/usr/local/lib -L/usr/lib
 LDLIBS2 = -lopencv_core -lopencv_videoio -lopencv_imgproc -lopencv_imgcodecs
 
