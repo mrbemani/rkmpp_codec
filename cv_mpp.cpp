@@ -107,6 +107,9 @@ int main(int argc, char *argv[]) {
     // Set the resolution
     cfg_set.prep.width = TARGET_W;
     cfg_set.prep.height = TARGET_H;
+    cfg_set.prep.hor_stride = TARGET_W;
+    cfg_set.prep.ver_stride = TARGET_H;
+    cfg_set.prep.format = MPP_FMT_RGB888;
 
     cfg_set.rc.rc_mode = MPP_ENC_RC_MODE_CBR;
     cfg_set.rc.quality = MPP_ENC_RC_QUALITY_BEST;
@@ -144,6 +147,7 @@ int main(int argc, char *argv[]) {
         
         // Assume MPP requires a specific buffer format
         size_t in_bufsize = frame.total() * frame.elemSize();
+        print ("frame.total() = %d, frame.elemSize() = %d\n", frame.total(), frame.elemSize());
         printf("converting cv_frame to mpp_frame ... %ld \n", in_bufsize);
         MppFrame mpp_frame = convertToMppFrame(frame);
         printf("[Converting Done]\n");
