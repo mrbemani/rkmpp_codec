@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
         
         // Assume MPP requires a specific buffer format
         size_t in_bufsize = frame.total() * frame.elemSize();
-        print ("frame.total() = %d, frame.elemSize() = %d\n", frame.total(), frame.elemSize());
+        printf("frame.total() = %d, frame.elemSize() = %d\n", frame.total(), frame.elemSize());
         printf("converting cv_frame to mpp_frame ... %ld \n", in_bufsize);
         MppFrame mpp_frame = convertToMppFrame(frame);
         printf("[Converting Done]\n");
