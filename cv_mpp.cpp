@@ -199,7 +199,7 @@ int main(int argc, char *argv[]) {
     }
 
     /* drop frame or not when bitrate overflow */
-    mpp_ret = mpp_enc_cfg_set_u32(cfg, "rc:drop_mode", MPP_ENC_RC_DROP_FRM_DISABLED);
+    mpp_ret = mpp_enc_cfg_set_u32(mppEncCfg, "rc:drop_mode", MPP_ENC_RC_DROP_FRM_DISABLED);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_u32 [rc:drop_mode]\n");
@@ -207,7 +207,7 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpp_enc_cfg_set_u32(cfg, "rc:drop_thd", 20);        /* 20% of max bps */
+    mpp_ret = mpp_enc_cfg_set_u32(mppEncCfg, "rc:drop_thd", 20);        /* 20% of max bps */
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_u32 [rc:drop_thd]\n");
@@ -215,7 +215,7 @@ int main(int argc, char *argv[]) {
         return 4;
     }
 
-    mpp_ret = mpp_enc_cfg_set_u32(cfg, "rc:drop_gap", 1);         /* Do not continuous drop frame */
+    mpp_ret = mpp_enc_cfg_set_u32(mppEncCfg, "rc:drop_gap", 1);         /* Do not continuous drop frame */
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_u32 [rc:drop_gap]\n");
@@ -277,7 +277,7 @@ int main(int argc, char *argv[]) {
         printf("Error: %d\n", mpp_ret);
     }
 
-    mpp_ret = mpp_enc_cfg_set_s32(cfg, "codec:type", MPP_VIDEO_CodingAVC);
+    mpp_ret = mpp_enc_cfg_set_s32(mppEncCfg, "codec:type", MPP_VIDEO_CodingAVC);
     if (mpp_ret != MPP_OK)
     {
         printf("Failed to mpp_enc_cfg_set_s32 [codec:type]\n");
@@ -293,7 +293,7 @@ int main(int argc, char *argv[]) {
      * 77  - Main profile
      * 100 - High profile
      */
-    mpp_enc_cfg_set_s32(cfg, "h264:profile", 100);
+    mpp_enc_cfg_set_s32(mppEncCfg, "h264:profile", 100);
     /*
      * H.264 level_idc parameter
      * 10 / 11 / 12 / 13    - qcif@15fps / cif@7.5fps / cif@15fps / cif@30fps
@@ -302,14 +302,14 @@ int main(int argc, char *argv[]) {
      * 40 / 41 / 42         - 1080p@30fps / 1080p@30fps / 1080p@60fps
      * 50 / 51 / 52         - 4K@30fps
      */
-    mpp_enc_cfg_set_s32(cfg, "h264:level", 40);
-    mpp_enc_cfg_set_s32(cfg, "h264:cabac_en", 1);
-    mpp_enc_cfg_set_s32(cfg, "h264:cabac_idc", 0);
-    mpp_enc_cfg_set_s32(cfg, "h264:trans8x8", 1);
+    mpp_enc_cfg_set_s32(mppEncCfg, "h264:level", 40);
+    mpp_enc_cfg_set_s32(mppEncCfg, "h264:cabac_en", 1);
+    mpp_enc_cfg_set_s32(mppEncCfg, "h264:cabac_idc", 0);
+    mpp_enc_cfg_set_s32(mppEncCfg, "h264:trans8x8", 1);
 
     mpp_env_get_u32("constraint_set", &constraint_set, 0);
     if (constraint_set & 0x3f0000)
-        mpp_enc_cfg_set_s32(cfg, "h264:constraint_set", constraint_set);
+        mpp_enc_cfg_set_s32(mppEncCfg, "h264:constraint_set", constraint_set);
     
 
     // Set the encoder configuration
