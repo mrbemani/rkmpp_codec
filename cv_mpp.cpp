@@ -5,17 +5,18 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <opencv2/opencv.hpp>
 #include <mpp.h>
 #include <rk_mpi.h>
 #include <mpp_enc_cfg.h>
 #include <mpp_env.h>
+#include <mpp_frame.h>
 
 
 #define TARGET_W 1920
 #define TARGET_H 1080
-
 
 MppBufferGroup mppBufGrp = nullptr;
 
