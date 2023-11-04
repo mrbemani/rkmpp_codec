@@ -10,6 +10,7 @@
 #include <mpp.h>
 #include <rk_mpi.h>
 #include <mpp_enc_cfg.h>
+#include <mpp_env.h>
 
 
 #define TARGET_W 1920
@@ -56,7 +57,7 @@ size_t convertToMppFrame(const cv::Mat &cvFrame, MppFrame &mppFrame, BOOL isLast
     } else {
         header_size = 0;
     }
-    
+
     MPP_RET ret = mpp_buffer_get(mppBufGrp, &mppBuffer, frame_size + header_size);
     if (ret != MPP_OK)
     {
