@@ -339,7 +339,8 @@ int main(int argc, char *argv[]) {
         size_t in_bufsize = frame.total() * frame.elemSize() * 2;
         printf("frame.total() = %ld, frame.elemSize() = %ld\n", frame.total(), frame.elemSize());
         printf("converting cv_frame to mpp_frame ... %ld \n", in_bufsize);
-        MppFrame mpp_frame = convertToMppFrame(frame);
+        MppFrame mpp_frame = nullptr;
+        size_t frame_size = convertToMppFrame(frame, mpp_frame, (BOOL)(frame_idx >= 100) );
         printf("[Converting Done]\n");
 
         // Encode the frame using MPP
