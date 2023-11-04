@@ -12,8 +12,13 @@
 #include <rk_mpi.h>
 #include <mpp_enc_cfg.h>
 #include <mpp_env.h>
+#include <mpp_common.h>
 #include <mpp_frame.h>
 
+typedef int BOOL;
+
+#define TRUE 1
+#define FALSE 0
 
 #define TARGET_W 1920
 #define TARGET_H 1080
@@ -43,7 +48,7 @@ size_t convertToMppFrame(const cv::Mat &cvFrame, MppFrame &mppFrame, BOOL isLast
     mpp_frame_set_hor_stride(mppFrame, TARGET_W);
     mpp_frame_set_ver_stride(mppFrame, TARGET_H);
     mpp_frame_set_fmt(mppFrame, fmt);  // Assuming RGB format
-    mpp_frame_set_eos(frame, isLastFrame);
+    mpp_frame_set_eos(mppFrame, isLastFrame);
     
     
     // Allocate an MppBuffer to hold the frame data
