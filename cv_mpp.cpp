@@ -22,6 +22,7 @@ typedef int BOOL;
 
 #define TARGET_W 1920
 #define TARGET_H 1080
+#define FPS 25
 
 MppBufferGroup mppBufGrp = nullptr;
 
